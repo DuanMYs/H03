@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="bootstrap.css">
+    <script src="vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <my-temp  @func="add"  v-bind:test="test1" ></my-temp>
+        <ul class="list-group">
+            <li class="list-group-item"  v-for="item in lists" :key="item.id">
+              <span class="badge">评论人:{{item.commName}}</span>
+                {{item.contents}}
+            </li>
+          </ul> 
+          
+    </div>
+
+    <!-- 定义一个组件模板 -->
+<template  id="t1">
+    <div>
+        {{test.test01}}:<input v-model="contents" class="form-control input-lg" type="text" >
+        {{test.test02}}:<input v-model="commName" class="form-control input-lg" type="text" >
+    <button type="button"  @click="fn" class="btn btn-primary">{{test.test03}}!!</button>
+</div>
+</template>
+    <script>
+        
+        var info = {
+            template:"#t1",
+            data : function (){
+                return {commName:'',contents:''}
+            },
+            props : ['test'],//props:{}
+            methods:{
+                 // 在子组件中调用父组件中的方法  $emit()
+                fn(){
+                    this.$emit('func',Math.random(),this.commName,this.contents)
+                    this.commName=''
+                    this.contents=''
+                }
+            }
+
+        }
+
+        new Vue({
+            el:'#app',
+            data:{
+               test1:{
+               test01:'留言',
+               test02:'昵称',
+               test03:'发表'
+            },
+            lists:[
+            {id:1,commName:"王语嫣",contents:"在这个世界上，总会有些人让你忧伤、让你妒忌、让你咬牙切齿，并不是他们有多坏，只是由于你很在乎。"},
+            {id:2,commName:"周芷若",contents:"最先道歉的人最勇敢；最先宽容的人最坚强；最先释怀的人最幸福。"},
+            {id:3,commName:'张无忌',contents:"最能让人觉得快乐的事，莫过于历经一番勤奋后，全部东西正渐渐地变成你想要的样子。"}
+            ]
+
+            },
+            methods: {
+              add: function(id,commName,contents){
+                this.lists.push({id:id,commName:commName,contents:contents})
+              },
+             
+            },
+            components:{
+                'my-temp':info
+            },
+            filters:{
+
+            },
+            comments:{
+
+            }
+        })
+    </script>
+</body>
+</html>
